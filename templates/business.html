@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12482E">
   <title>{{ business.name }}</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; padding: 40px 20px; }
-    h1 { margin-bottom: 30px; }
-    a { display: block; max-width: 320px; margin: 12px auto; padding: 14px; background: #222; color: #fff; text-decoration: none; border-radius: 8px; }
-    a:hover { background: #444; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>{{ business.name }}</h1>
-  {% for link in business.links %}
-    <a href="{{ link.url }}" {% if link.url.startswith('http') %}target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
-  {% endfor %}
+  <header class="hero">
+    <div class="mono">{{ business.name[:1] | upper }}</div>
+    <h1>{{ business.name }}</h1>
+  </header>
+  <main class="sheet">
+    {% for link in business.links %}
+      {% set shown = link.url | replace('https://', '') | replace('http://', '') | replace('mailto:', '') | replace('tel:', '') | replace('www.', '') %}
+      <a class="link" href="{{ link.url }}" {% if link.url.startswith('http') %}target="_blank" rel="noopener"{% endif %}>
+        <span class="chip">{{ link.label[:1] }}</span>
+        <span class="txt"><b>{{ link.label }}</b><small>{{ shown }}</small></span>
+      </a>
+    {% else %}
+      <p class="empty">No links added yet.</p>
+    {% endfor %}
+  </main>
 </body>
 </html>

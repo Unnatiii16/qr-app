@@ -1,0 +1,142 @@
+:root {
+  --ink: #0E2A1D;
+  --forest: #12482E;
+  --leaf: #1F8A4C;
+  --mint: #7EE2A5;
+  --paper: #F0F6F1;
+  --sheet: #FFFFFF;
+  --line: #D3E4D8;
+  --muted: #4B6B58;
+  --soft: #BFE3CB;
+  --hover: #F6FBF7;
+  --press: #E8F3EA;
+  --hint: #8FA899;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+  min-height: 100vh;
+}
+:focus-visible { outline: 3px solid var(--leaf); outline-offset: 3px; }
+
+/* top band */
+.hero {
+  background: var(--forest);
+  color: #fff;
+  text-align: center;
+  padding: 56px 24px 88px;
+  border-radius: 0 0 36px 36px;
+}
+.hero.compact { padding: 44px 24px 84px; }
+.hero h1 {
+  margin: 0;
+  font-size: clamp(34px, 9vw, 48px);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.hero.compact h1 { font-size: clamp(30px, 8vw, 40px); }
+.hero p { margin: 10px auto 0; max-width: 30ch; color: var(--soft); }
+.mono {
+  width: 84px; height: 84px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--mint);
+  color: var(--ink);
+  display: grid; place-items: center;
+  font-size: 44px; font-weight: 800;
+}
+
+/* white sheet that overlaps the band */
+.sheet {
+  position: relative;
+  width: min(480px, calc(100% - 32px));
+  margin: -52px auto 48px;
+  background: var(--sheet);
+  border-radius: 24px;
+  box-shadow: 0 1px 0 var(--line), 0 12px 32px rgba(14, 42, 29, 0.10);
+  overflow: hidden;
+}
+.sheet.pad { padding: 24px; }
+.center { text-align: center; }
+
+/* customer link list */
+.link {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px;
+  text-decoration: none;
+  border-top: 1px solid var(--line);
+  transition: background 0.15s;
+}
+.link:first-child { border-top: 0; }
+.link:hover { background: var(--hover); }
+.link:active { background: var(--press); }
+.chip {
+  flex: none; width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--mint);
+  display: grid; place-items: center;
+  font-size: 20px; font-weight: 800;
+}
+.txt { min-width: 0; }
+.link b { display: block; font-size: 20px; font-weight: 700; line-height: 1.2; }
+.link small {
+  display: block; color: var(--muted); font-size: 14px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+
+/* form */
+form > label:first-child { margin-top: 0; }
+label { display: block; margin-top: 18px; font-size: 15px; font-weight: 600; }
+input {
+  width: 100%; margin-top: 6px; padding: 13px 14px;
+  font: inherit; font-size: 16px; font-weight: 400;
+  color: var(--ink); background: #fff;
+  border: 1.5px solid var(--line); border-radius: 12px;
+}
+input::placeholder { color: var(--hint); }
+input:focus {
+  outline: none; border-color: var(--leaf);
+  box-shadow: 0 0 0 3px rgba(31, 138, 76, 0.18);
+}
+details { margin-top: 20px; border-top: 1px solid var(--line); }
+summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 0; cursor: pointer; list-style: none;
+  font-size: 19px; font-weight: 700;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; margin-left: auto; font-size: 26px; font-weight: 500; color: var(--leaf); line-height: 1; }
+details[open] summary::after { content: "\2212"; }
+.count { margin-left: auto; padding: 2px 10px; border-radius: 99px; background: var(--mint); font-size: 14px; font-weight: 600; }
+.count:empty { display: none; }
+.count + * { margin-left: 0; }
+summary .count ~ ::after { margin-left: 0; }
+
+/* buttons */
+.btn {
+  display: block; width: 100%; margin-top: 14px; padding: 16px;
+  border: 0; border-radius: 14px;
+  background: var(--mint); color: var(--ink);
+  font: inherit; font-size: 18px; font-weight: 700;
+  text-align: center; text-decoration: none; cursor: pointer;
+}
+.btn:active { transform: scale(0.98); }
+.btn.ghost { background: transparent; border: 1.5px solid var(--line); }
+form .btn { margin-top: 28px; }
+
+/* QR page */
+.qr { display: block; width: 240px; max-width: 100%; height: auto; margin: 0 auto; }
+.url { margin: 14px 0 6px; color: var(--muted); font-size: 14px; word-break: break-all; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .btn:active { transform: none; }
+}

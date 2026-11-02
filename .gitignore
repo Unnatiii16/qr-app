@@ -1,3 +1,4 @@
 venv/
 businesses.db
 __pycache__/
+.env
