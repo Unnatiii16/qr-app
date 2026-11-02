@@ -14,7 +14,7 @@
 <body>
   <h1>{{ business.name }}</h1>
   {% for link in business.links %}
-    <a href="{{ link.url }}" target="_blank">{{ link.label }}</a>
+    <a href="{{ link.url }}" {% if link.url.startswith('http') %}target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
   {% endfor %}
 </body>
 </html>
