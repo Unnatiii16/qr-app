@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create your page</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 40px 20px; }
+    form { max-width: 360px; margin: auto; }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 16px; font-size: 14px; }
+    input { width: 100%; padding: 10px; margin-top: 6px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; }
+    button { width: 100%; margin-top: 24px; padding: 14px; background: #222; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <h1>Create your page</h1>
+    <label>Business name *
+      <input name="name" required>
+    </label>
+    <label>Instagram username
+      <input name="instagram" placeholder="mycafe">
+    </label>
+    <label>WhatsApp number (with country code)
+      <input name="whatsapp" placeholder="919999999999">
+    </label>
+    <label>Facebook page link
+      <input name="facebook" placeholder="https://facebook.com/mycafe">
+    </label>
+    <label>Email
+      <input name="email" type="email" placeholder="hello@mycafe.com">
+    </label>
+    <label>Phone number
+      <input name="phone" placeholder="+919999999999">
+    </label>
+    <button type="submit">Create my page</button>
+  </form>
+</body>
+</html>

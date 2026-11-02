@@ -1,0 +1,3 @@
+venv/
+businesses.db
+__pycache__/

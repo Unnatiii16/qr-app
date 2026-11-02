@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ business.name }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; padding: 40px 20px; }
+    h1 { margin-bottom: 30px; }
+    a { display: block; max-width: 320px; margin: 12px auto; padding: 14px; background: #222; color: #fff; text-decoration: none; border-radius: 8px; }
+    a:hover { background: #444; }
+  </style>
+</head>
+<body>
+  <h1>{{ business.name }}</h1>
+  {% for link in business.links %}
+    <a href="{{ link.url }}" target="_blank">{{ link.label }}</a>
+  {% endfor %}
+</body>
+</html>
