@@ -1,44 +1,48 @@
 import io
+import os
 import re
-import sqlite3
+import psycopg
 import qrcode
+from psycopg.rows import dict_row
 from flask import Flask, render_template, request, redirect, url_for, abort, send_file
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-DB = "businesses.db"
+
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 
-def get_db():
-    conn = sqlite3.connect(DB)
-    conn.row_factory = sqlite3.Row
-    return conn
+def query(sql, params=(), fetch=None):
+    with psycopg.connect(DATABASE_URL, row_factory=dict_row) as conn:
+        cur = conn.execute(sql, params)
+        if fetch == "one":
+            return cur.fetchone()
+        if fetch == "all":
+            return cur.fetchall()
 
 
 def init_db():
-    with get_db() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS businesses (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                slug TEXT UNIQUE NOT NULL,
-                name TEXT NOT NULL,
-                instagram TEXT,
-                whatsapp TEXT,
-                facebook TEXT,
-                email TEXT,
-                phone TEXT
-            )
-        """)
+    query("""
+        CREATE TABLE IF NOT EXISTS businesses (
+            id SERIAL PRIMARY KEY,
+            slug TEXT UNIQUE NOT NULL,
+            name TEXT NOT NULL,
+            instagram TEXT,
+            whatsapp TEXT,
+            facebook TEXT,
+            email TEXT,
+            phone TEXT
+        )
+    """)
 
 
 def make_slug(name):
     base = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "business"
     slug, n = base, 2
-    with get_db() as conn:
-        while conn.execute("SELECT 1 FROM businesses WHERE slug = ?", (slug,)).fetchone():
-            slug = f"{base}-{n}"
-            n += 1
+    while query("SELECT 1 FROM businesses WHERE slug = %s", (slug,), "one"):
+        slug = f"{base}-{n}"
+        n += 1
     return slug
 
 
@@ -53,19 +57,17 @@ def create():
         phone = re.sub(r"[^\d+]", "", request.form["phone"])
 
         slug = make_slug(name)
-        with get_db() as conn:
-            conn.execute(
-                "INSERT INTO businesses (slug, name, instagram, whatsapp, facebook, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (slug, name, instagram, whatsapp, facebook, email, phone),
-            )
+        query(
+            "INSERT INTO businesses (slug, name, instagram, whatsapp, facebook, email, phone) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (slug, name, instagram, whatsapp, facebook, email, phone),
+        )
         return redirect(url_for("done", slug=slug))
     return render_template("create.html")
 
 
 @app.route("/b/<slug>")
 def business_page(slug):
-    with get_db() as conn:
-        row = conn.execute("SELECT * FROM businesses WHERE slug = ?", (slug,)).fetchone()
+    row = query("SELECT * FROM businesses WHERE slug = %s", (slug,), "one")
     if row is None:
         abort(404)
 
@@ -86,8 +88,7 @@ def business_page(slug):
 
 @app.route("/done/<slug>")
 def done(slug):
-    with get_db() as conn:
-        row = conn.execute("SELECT name FROM businesses WHERE slug = ?", (slug,)).fetchone()
+    row = query("SELECT name FROM businesses WHERE slug = %s", (slug,), "one")
     if row is None:
         abort(404)
     page_url = url_for("business_page", slug=slug, _external=True)
